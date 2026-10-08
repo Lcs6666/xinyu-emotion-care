@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./auth.css";
+import "./care-practice.css";
 
 export const metadata: Metadata = {
   title: "心屿｜情绪日记与自我关怀",
