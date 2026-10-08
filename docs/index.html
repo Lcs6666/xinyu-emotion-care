@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#214f43">
+  <meta name="description" content="心屿：私密的情绪日记、自我关怀与陪伴工具。">
+  <title>心屿｜情绪日记与自我关怀</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div id="auth" class="auth-page">
+    <section class="auth-card">
+      <div class="mark">♡</div>
+      <p class="eyebrow">心屿 · 匿名情绪日记</p>
+      <h1>给情绪一座安静的小岛</h1>
+      <p class="muted">无需手机号、邮箱或真实姓名。创建一个本地匿名账号，不同账号的记录彼此独立。</p>
+      <div class="seg"><button data-auth-mode="login" class="active">登录</button><button data-auth-mode="register">创建账号</button></div>
+      <form id="auth-form">
+        <label>匿名账号名<input id="username" required minlength="3" maxlength="24" placeholder="3–24 位，不需要真实姓名" autocomplete="username"></label>
+        <label>密码<input id="password" type="password" required minlength="8" placeholder="至少 8 位" autocomplete="current-password"></label>
+        <label id="confirm-wrap" hidden>确认密码<input id="confirm-password" type="password" minlength="8" placeholder="再次输入密码"></label>
+        <p id="auth-error" class="error" role="alert"></p>
+        <button id="auth-submit" class="primary">登录心屿</button>
+      </form>
+      <p class="local-note">🔒 数据仅保存在当前浏览器。清除浏览器数据会删除记录，请勿使用常用密码。</p>
+    </section>
+  </div>
+
+  <div id="app" hidden>
+    <header class="topbar">
+      <a class="brand" href="#top"><span>♡</span>心屿</a>
+      <div class="account"><i id="avatar">心</i><b id="account-name"></b><small>本地匿名账号</small><button id="logout">退出</button></div>
+    </header>
+
+    <main id="top" class="layout">
+      <section class="card recorder">
+        <p class="eyebrow">每日心情记录</p>
+        <h1>今天的心情，值得被看见。</h1>
+        <p class="muted">选不到合适的词？你也可以创建自己的心情。</p>
+        <label class="row-label">记录日期<input id="entry-date" type="date"></label>
+        <div id="moods" class="moods" aria-label="选择心情"></div>
+        <form id="mood-form" class="custom-mood"><strong>＋ 自定义</strong><input id="custom-emoji" value="🙂" maxlength="4" aria-label="图标"><input id="custom-name" required maxlength="8" placeholder="如：释然"><button>添加</button></form>
+        <div class="row-label"><span>情绪强度</span><b><span id="level-value">6</span> / 10</b></div>
+        <input id="level" type="range" min="1" max="10" value="6">
+        <h3 class="field-title">可能的触发因素</h3>
+        <div id="triggers" class="chips"></div>
+        <label class="field-title" for="note">想记下什么？</label>
+        <textarea id="note" placeholder="例如：下午汇报前一直很紧张，但结束后比想象中顺利……"></textarea>
+        <h3 class="field-title">添加心情图片</h3>
+        <div id="photo-preview" class="photos"><label class="photo-add">＋<input id="photos" type="file" accept="image/*" multiple hidden></label></div>
+        <p class="hint">最多 3 张，将压缩后私密保存在当前浏览器。</p>
+        <button id="save-entry" class="save">保存今天的心情</button>
+      </section>
+
+      <section class="dashboard">
+        <div class="section-head"><div><h2>我的情绪轨迹</h2><p>不是给情绪打分，而是慢慢认识自己的节奏。</p></div><div class="seg compact"><button data-view="week" class="active">周视图</button><button data-view="month">月视图</button></div></div>
+        <div id="week-view">
+          <div id="week-grid" class="week-grid"></div>
+          <div class="two-col">
+            <article class="card insight"><h3>本周触发因素</h3><p id="trigger-summary" class="muted"></p><div id="trigger-bars"></div></article>
+            <article class="card care">
+              <p class="eyebrow">为此刻推荐</p><h3 id="care-title">一分钟舒缓呼吸</h3><p id="care-desc" class="muted">跟随节奏呼吸，让身体先慢下来。</p>
+              <div id="care-options" class="care-options"></div>
+              <div id="timer" class="timer">01:00</div><p id="care-phase" class="care-phase">准备好时开始</p>
+              <div class="care-actions"><button id="care-swap">换一个</button><button id="care-start" class="dark">开始练习</button></div>
+            </article>
+          </div>
+        </div>
+        <div id="month-view" hidden>
+          <section class="card calendar-card"><div class="calendar-head"><button id="prev-month">‹</button><h3 id="month-title"></h3><button id="next-month">›</button></div><div class="weekday"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div><div id="calendar" class="calendar"></div></section>
+          <section class="card gallery"><h3>心情影集</h3><div id="gallery-grid" class="gallery-grid"></div></section>
+        </div>
+
+        <div class="companion">
+          <article class="card encourage"><p class="eyebrow">每日鼓励</p><blockquote id="encouragement"></blockquote><button id="next-card">换一句</button></article>
+          <article class="card chat"><div class="chat-head"><h3>心屿陪伴</h3><span>AI 陪伴体验</span></div><div id="messages" class="messages"></div><form id="chat-form"><input id="chat-input" maxlength="500" placeholder="说说此刻的感受……"><button>发送</button></form><p class="hint">陪伴对话不能替代专业心理咨询；出现紧急风险时请立即联系急救服务或可信赖的人。</p></article>
+        </div>
+      </section>
+    </main>
+    <button id="feedback-open" class="feedback-fab">✦ 欢迎给我们提建议</button>
+    <p class="safety">心屿不提供心理诊断或危机干预。如你有自伤或伤害他人的紧急风险，请立即联系当地急救服务、心理危机热线或可信赖的人。</p>
+  </div>
+
+  <dialog id="feedback-dialog">
+    <form id="feedback-form" method="dialog">
+      <button id="feedback-close" class="dialog-close" type="button">×</button><p class="eyebrow">帮助心屿变得更好</p><h2>欢迎给我们提出建议</h2>
+      <label>反馈类型<select id="feedback-type"><option>功能建议</option><option>体验问题</option><option>内容建议</option><option>其他</option></select></label>
+      <label>你的想法<textarea id="feedback-text" required minlength="5" placeholder="告诉我们哪里可以做得更好……"></textarea></label>
+      <button class="primary">提交反馈</button><p id="feedback-success" class="success"></p>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="./app.js"></script>
+</body>
+</html>
