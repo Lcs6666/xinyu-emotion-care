@@ -1,10 +1,10 @@
 import { env } from "cloudflare:workers";
-import { getChatGPTUser } from "../../chatgpt-auth";
+import { getCurrentUser } from "../../auth";
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 export async function POST(request: Request) {
-  const user = await getChatGPTUser();
+  const user = await getCurrentUser();
   if (!user) return Response.json({ error: "请先登录" }, { status: 401 });
 
   const form = await request.formData();

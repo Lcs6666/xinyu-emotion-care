@@ -1,8 +1,8 @@
 import { env } from "cloudflare:workers";
-import { getChatGPTUser } from "../../chatgpt-auth";
+import { getCurrentUser } from "../../auth";
 
 export async function GET() {
-  const user = await getChatGPTUser();
+  const user = await getCurrentUser();
   if (!user) return Response.json({ error: "请先登录" }, { status: 401 });
 
   const [recordsResult, imagesResult, moodsResult] = await Promise.all([

@@ -1,8 +1,8 @@
 import { env } from "cloudflare:workers";
-import { getChatGPTUser } from "../../../chatgpt-auth";
+import { getCurrentUser } from "../../../auth";
 
 export async function GET(_request: Request, context: { params: Promise<{ id: string }> }) {
-  const user = await getChatGPTUser();
+  const user = await getCurrentUser();
   if (!user) return new Response("Unauthorized", { status: 401 });
   const { id } = await context.params;
   const image = await env.DB.prepare("SELECT object_key, mime_type FROM record_images WHERE id = ? AND user_id = ?")

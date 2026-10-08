@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 
 type Mood = { id?: string; name: string; emoji: string; custom?: boolean };
 type Entry = { id: string; date: string; mood: string; emoji: string; level: number; triggers: string[]; note: string; images: string[] };
-type User = { name: string; email: string };
+type User = { name: string };
 
 const baseMoods: Mood[] = [
   { name: "平静", emoji: "😌" }, { name: "开心", emoji: "😊" }, { name: "期待", emoji: "🤩" },
@@ -23,7 +23,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 const iso = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 const today = () => iso(new Date());
 
-export default function XinyuApp({ user, signOutPath }: { user: User; signOutPath: string }) {
+export default function XinyuApp({ user }: { user: User }) {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [customMoods, setCustomMoods] = useState<Mood[]>([]);
   const [mood, setMood] = useState<Mood>(baseMoods[1]);
@@ -112,12 +112,13 @@ export default function XinyuApp({ user, signOutPath }: { user: User; signOutPat
     setMessages((items) => [...items, { role: "user", text }, { role: "ai", text: companionReply(text) }]); setChatText("");
   };
 
-  const initial = (user.name || user.email).trim().charAt(0).toUpperCase();
+  const signOut = async () => { await fetch("/api/auth/logout", { method: "POST" }); window.location.reload(); };
+  const initial = user.name.trim().charAt(0).toUpperCase();
   return (
     <div className="app">
       <header className="topbar">
         <div className="brand"><span className="logo">♡</span>心屿</div>
-        <div className="account"><span className="avatar">{initial}</span><span><b>{user.name}</b><small>记录已独立保存</small></span><a href={signOutPath} target="_top">退出</a></div>
+        <div className="account"><span className="avatar">{initial}</span><span><b>{user.name}</b><small>匿名账号 · 独立保存</small></span><button onClick={() => void signOut()}>退出</button></div>
       </header>
 
       <main className="shell">

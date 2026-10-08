@@ -1,8 +1,8 @@
 import { env } from "cloudflare:workers";
-import { getChatGPTUser } from "../../chatgpt-auth";
+import { getCurrentUser } from "../../auth";
 
 export async function POST(request: Request) {
-  const user = await getChatGPTUser();
+  const user = await getCurrentUser();
   if (!user) return Response.json({ error: "请先登录" }, { status: 401 });
   const body = await request.json() as { category?: string; message?: string };
   const category = String(body.category || "产品建议").slice(0, 20);

@@ -1,8 +1,8 @@
 import { env } from "cloudflare:workers";
-import { getChatGPTUser } from "../../chatgpt-auth";
+import { getCurrentUser } from "../../auth";
 
 export async function POST(request: Request) {
-  const user = await getChatGPTUser();
+  const user = await getCurrentUser();
   if (!user) return Response.json({ error: "请先登录" }, { status: 401 });
   const body = await request.json() as { name?: string; emoji?: string };
   const name = String(body.name || "").trim().slice(0, 8);
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const user = await getChatGPTUser();
+  const user = await getCurrentUser();
   if (!user) return Response.json({ error: "请先登录" }, { status: 401 });
   const { id } = await request.json() as { id?: string };
   await env.DB.prepare("DELETE FROM custom_moods WHERE id = ? AND user_id = ?").bind(id || "", user.userId).run();
