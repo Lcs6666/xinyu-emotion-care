@@ -21,11 +21,17 @@ export default function LoginPanel() {
     setBusy(true);
     const endpoint = mode === "register" ? "/api/auth/register" : mode === "recover" ? "/api/auth/recover" : "/api/auth/login";
     const payload = mode === "recover" ? { username, recoveryCode: recovery, newPassword: password } : { username, password };
-    const response = await fetch(endpoint, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
-    const data = await response.json(); setBusy(false);
-    if (!response.ok) { setError(data.error || "操作失败，请稍后重试"); return; }
-    if (data.recoveryCode) { setIssuedRecovery(data.recoveryCode); return; }
-    window.location.reload();
+    try {
+      const response = await fetch(endpoint, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
+      const data = await response.json().catch(() => ({})) as { error?: string; recoveryCode?: string };
+      if (!response.ok) { setError(data.error || "服务暂时不可用，请稍后重试"); return; }
+      if (data.recoveryCode) { setIssuedRecovery(data.recoveryCode); return; }
+      window.location.reload();
+    } catch {
+      setError("网络连接异常，请检查网络后重试");
+    } finally {
+      setBusy(false);
+    }
   }
 
   if (issuedRecovery) return <main className="login-page"><section className="login-card recovery-card"><div className="login-logo">✓</div><p className="eyebrow">账号已准备好</p><h1>请保存你的恢复码</h1><p className="login-copy">它是忘记密码后找回账号的唯一方式。我们无法替你恢复或重新发送。</p><div className="recovery-code">{issuedRecovery}</div><button className="copy-code" onClick={() => void navigator.clipboard.writeText(issuedRecovery)}>复制恢复码</button><button className="primary-button" onClick={() => window.location.reload()}>我已保存，进入心屿</button><p className="privacy-note">请勿把恢复码发给任何人。</p></section></main>;
