@@ -7,7 +7,7 @@
   <meta name="description" content="心屿：私密的情绪日记、自我关怀与陪伴工具。">
   <title>心屿｜情绪日记与自我关怀</title>
   <link rel="stylesheet" href="./styles.css">
-  <link rel="stylesheet" href="./fixes.css">
+  <link rel="stylesheet" href="./fixes.css?v=3">
 </head>
 <body>
   <div id="auth" class="auth-page">
@@ -16,6 +16,11 @@
       <p class="eyebrow">心屿 · 匿名情绪日记</p>
       <h1>给情绪一座安静的小岛</h1>
       <p class="muted">无需手机号、邮箱或真实姓名。创建一个本地匿名账号，不同账号的记录彼此独立。</p>
+      <section id="known-accounts" class="known-accounts" hidden>
+        <p>本机已有账号</p>
+        <div id="known-account-list"></div>
+        <small>选择账号，输入密码即可继续查看原来的记录。</small>
+      </section>
       <div class="seg"><button data-auth-mode="login" class="active">登录</button><button data-auth-mode="register">创建账号</button></div>
       <form id="auth-form">
         <label>匿名账号名<input id="username" required minlength="3" maxlength="24" placeholder="3–24 位，不需要真实姓名" autocomplete="username"></label>
@@ -92,6 +97,6 @@
     </form>
   </dialog>
   <div id="toast" class="toast" role="status"></div>
-  <script src="./app.js"></script>
+  <script src="./app.js?v=3"></script>
 </body>
 </html>

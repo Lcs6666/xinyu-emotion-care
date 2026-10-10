@@ -1,3 +1,44 @@
 [hidden] {
   display: none !important;
 }
+
+.known-accounts {
+  margin: 18px 0 4px;
+  padding: 14px;
+  border: 1px solid #cfe1d5;
+  border-radius: 15px;
+  background: #f4faf6;
+}
+
+.known-accounts p {
+  margin: 0 0 9px;
+  color: #2c6656;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#known-account-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 8px;
+}
+
+#known-account-list button {
+  border: 1px solid #add0b9;
+  border-radius: 999px;
+  padding: 7px 11px;
+  background: white;
+  color: #17362d;
+  font-size: 12px;
+}
+
+#known-account-list button.active {
+  background: #2c6656;
+  color: white;
+}
+
+.known-accounts small {
+  color: #687c72;
+  font-size: 11px;
+}
